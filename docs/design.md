@@ -75,7 +75,8 @@ Flow:
    - Typed text that matches no branch becomes `Create branch '<text>'`.
 3. If a new branch is being created, an InputBox asks for its name. The
    default is empty. Validation rejects names that `git check-ref-format
-   --branch` rejects and names that already exist.
+   --branch` rejects and names that already exist. An empty name is accepted
+   and means "let git name the branch", see step 5.
 4. An InputBox asks for the worktree directory name. The default is the branch
    name with `/` replaced by `-`. The full path is shown as the prompt so the
    user sees where it lands.
@@ -83,11 +84,13 @@ Flow:
    - Existing local branch: `git worktree add <path> <branch>`
    - New branch: `git worktree add -b <branch> <path> HEAD`
    - Remote branch: `git worktree add --track -b <name> <path> origin/<name>`
-   - No branch chosen at all, that is the user accepted step 2 with nothing
-     selected and nothing typed: `git worktree add <path>`. Git then creates a
-     branch named after the directory, starting from the current HEAD. That is
-     the "based on the current branch" case, and it uses git's own default
-     rather than inventing one.
+   - No branch name given, that is the user chose "Create new branch" in step
+     2 and left the name empty in step 3: `git worktree add <path>`. Git then
+     creates a branch named after the directory, starting from the current
+     HEAD. That is the "based on the current branch" case, and it uses git's
+     own default rather than inventing one. A QuickPick always has an active
+     item, so "nothing selected" cannot be expressed there, which is why the
+     empty name carries this meaning.
 6. The new worktree opens according to the open behaviour below.
 
 The base directory for new worktrees is the setting `worktree.baseDirectory`,
@@ -151,7 +154,8 @@ Each item is a worktree:
 Menus:
 
 - View title: Create, Refresh.
-- Inline on every item: Open in New Window, Open Terminal.
+- Inline on `main`, `current` and `other`: Open in New Window, Open Terminal.
+  A `prunable` worktree has no directory, so neither action applies.
 - Context menu on `other` and `current`: Open in Current Window, Delete, Copy
   Path, Reveal in Finder or Explorer.
 - Context menu on `main`: the same minus Delete.
@@ -191,8 +195,10 @@ is asked up front and every prompt is modal:
    output is non-empty, a second modal offers `Force Delete` and states that
    uncommitted changes are lost. Checking first avoids a failed remove that
    leaves the window half torn down.
-3. Dispose every terminal whose cwd is inside the worktree. Shells holding the
-   directory as cwd block removal on Windows.
+3. Dispose every terminal whose cwd is inside the worktree. Terminals created
+   without an explicit cwd start in the workspace folder, which is this
+   worktree, so they count too. Shells holding the directory as cwd block
+   removal on Windows.
 4. `git worktree remove <path>`, with `--force` if step 2 said so. The command
    runs with cwd set to the common dir, not the worktree being removed.
 5. Branch deletion if chosen in step 1. `git branch -d <name>`, then a modal
