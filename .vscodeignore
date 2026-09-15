@@ -1,7 +1,9 @@
 .vscode/**
 .vscode-test/**
 .github/**
+.claude/**
 docs/**
+AGENT.md
 out/**
 src/**
 node_modules/**
