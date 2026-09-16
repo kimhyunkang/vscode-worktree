@@ -145,10 +145,10 @@ Each item is a worktree:
 
 | Field | Content |
 |---|---|
-| label | Branch name, or `(detached) <short sha>` |
+| label | Branch name, or `(detached) <short sha>`. Led by `●` for the worktree this window has open, because VS Code hides the description before it truncates the label |
 | description | Path relative to `worktree.baseDirectory`, or the absolute path if outside it |
-| icon | `$(repo)` for the main worktree, `$(git-branch)` otherwise, `$(warning)` when prunable |
-| tooltip | Absolute path, HEAD sha, locked reason, prunable reason |
+| icon | `$(repo)` for the main worktree, `$(git-branch)` otherwise, `$(warning)` when prunable. Tinted `charts.green` for the worktree this window has open |
+| tooltip | Absolute path, `● Open in this window` for the current worktree, HEAD sha, locked reason, prunable reason |
 | contextValue | `main`, `current`, `other`, `prunable`. The `current` value marks the worktree this window has open |
 
 Menus:

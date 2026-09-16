@@ -89,7 +89,7 @@
         {
           "id": "worktrees",
           "title": "Worktrees",
-          "icon": "$(git-branch)"
+          "icon": "$(list-tree)"
         }
       ]
     },

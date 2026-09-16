@@ -43,8 +43,15 @@ export enum ProgressLocation {
   Notification = 15
 }
 
-export class ThemeIcon {
+export class ThemeColor {
   constructor(readonly id: string) {}
+}
+
+export class ThemeIcon {
+  constructor(
+    readonly id: string,
+    readonly color?: ThemeColor
+  ) {}
 }
 
 export class MarkdownString {
