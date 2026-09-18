@@ -1,8 +1,7 @@
-# Git Worktrees for VS Code
+# `vscode-worktree`
 
-One VS Code window per git worktree. The extension shells out to `git` for
-every operation, lists every worktree of the current repository in its own
-Activity Bar view, and drives create, open and delete from there.
+The `vscode-worktree` extension helps you manage git worktree in its own window. The extension can create a worktree from an existing local branch, or create a new worktree with a new branch out of an existing branch.
+The one-window-per-worktree model helps you work on multiple different branches in parallel.
 
 The full specification lives in [docs/design.md](docs/design.md).
 
@@ -13,7 +12,7 @@ The full specification lives in [docs/design.md](docs/design.md).
   branch after the worktree directory, starting from the current HEAD.
   New worktrees land in `worktree.baseDirectory`, a sibling of the repository
   by default, so they stay out of its file watchers, search and `.gitignore`.
-- **Open** a worktree in a new window or in the current one. VS Code focuses a
+- **Open** an existing worktree in a new window or in the current one. VS Code focuses a
   window that already has the folder open instead of opening a second copy.
 - **Delete** a worktree, including the one the current window has open: the
   extension confirms up front, checks for uncommitted changes, disposes
@@ -40,8 +39,7 @@ The `git.path` setting of the built-in Git extension is honoured.
 
 ## Requirements
 
-git 2.7 or newer on `PATH`, or `git.path` pointing at it. The welcome view says
-so when the check fails.
+git 2.7 or newer on `PATH`, or `git.path` pointing at it.
 
 ## Development
 
