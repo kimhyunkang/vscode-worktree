@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Check the tag matches package.json
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          manifest="$(node -p 'require("./package.json").version')"
+          if [ "$tag" != "$manifest" ]; then
+            echo "tag $GITHUB_REF_NAME does not match package.json version $manifest" >&2
+            exit 1
+          fi
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+
+      - name: Package
+        run: |
+          npm run package
+          echo "vsix=$(ls *.vsix)" >> "$GITHUB_OUTPUT"
+        id: package
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.package.outputs.vsix }}
+          generate_release_notes: true
+          # A tag carrying a suffix, v0.2.0-rc.1, is published as a prerelease.
+          prerelease: ${{ contains(github.ref_name, '-') }}
